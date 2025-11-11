@@ -110,7 +110,7 @@ const Index = () => {
                 Upload medical images and clinical notes to receive AI-powered diagnostic insights, 
                 evidence-based suggestions, and comprehensive case analysis.
               </p>
-              <div className="flex gap-4 justify-center">
+              <div className="flex justify-center">
                 <Button 
                   size="lg" 
                   onClick={() => setActiveView("upload")}
@@ -118,13 +118,6 @@ const Index = () => {
                 >
                   <Upload className="mr-2 h-5 w-5" />
                   Get Started
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                >
-                  <FileText className="mr-2 h-5 w-5" />
-                  Learn More
                 </Button>
               </div>
             </div>
