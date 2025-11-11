@@ -18,40 +18,35 @@ const Index = () => {
   };
 
   const handleQuery = async (query: string) => {
-    // Mock API call - simulating AI response
-    toast.info("Analyzing your query...");
+    toast.info("Analyzing your query with AI...");
     
-    setTimeout(() => {
-      const mockResult = {
-        query,
-        confidence: 89,
-        diagnoses: [
-          {
-            condition: "Pneumonia",
-            confidence: 89,
-            reasoning: "Bilateral infiltrates visible on chest X-ray combined with reported fever and cough symptoms",
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/analyze-case`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-          {
-            condition: "Bronchitis",
-            confidence: 72,
-            reasoning: "Persistent cough and respiratory distress align with bronchial inflammation",
-          },
-        ],
-        suggestedTests: [
-          "Complete Blood Count (CBC)",
-          "Sputum Culture",
-          "Pulmonary Function Test",
-        ],
-        recommendations: [
-          "Consider antibiotic therapy based on culture results",
-          "Monitor oxygen saturation levels",
-          "Follow-up chest X-ray in 2 weeks",
-        ],
-      };
-      
-      setAnalysisResult(mockResult);
-      toast.success("Analysis complete");
-    }, 2000);
+          body: JSON.stringify({
+            query,
+            caseData,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to analyze case');
+      }
+
+      const result = await response.json();
+      setAnalysisResult(result);
+      toast.success("AI analysis complete");
+    } catch (error) {
+      console.error('Analysis error:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to analyze case');
+    }
   };
 
   return (
